@@ -33,7 +33,7 @@ public class ClientHandler implements Runnable {
                 Object obj = in.readObject();
                 if (obj instanceof Command) {
                     Command cmd = (Command) obj;
-                    cmd.execute();
+                    cmd.execute(this);
                 }
             }
         } catch (EOFException eof) {
