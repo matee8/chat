@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 public enum DatabaseHandler {
     INSTANCE;
 
-    private static final Logger logger = LogManager.getLogger(DatabaseHandler.class);
+    private final Logger logger = LogManager.getLogger(DatabaseHandler.class);
     private static final String DB_URL = "jdbc:h2:./chatdb";
     private static final String DB_USER = "sa";
     private static final String DB_PASSWORD = "";
