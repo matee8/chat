@@ -26,7 +26,11 @@ public class AppConfigLoader {
             DatabaseSettings databaseSettings = new DatabaseSettings(dbUrl, dbUsername, dbPassword);
             logger.debug("Loaded DatabaseSettings: {}", databaseSettings);
 
-            AppConfig appConfig = new AppConfig(serverSettings, databaseSettings);
+            String jwtSecretKey = rawConfig.getString("jwt.secretKey");
+            String jwtIssuer = rawConfig.getString("jwt.issuer");
+            TokenSettings tokenSettings = new TokenSettings(jwtSecretKey, jwtIssuer);
+
+            AppConfig appConfig = new AppConfig(serverSettings, databaseSettings, tokenSettings);
             logger.info("Application configuration loaded.");
 
             return appConfig;
