@@ -23,7 +23,8 @@ public class AppConfigLoader {
             final String dbUrl = rawConfig.getString("db.url");
             final String dbUsername = rawConfig.getString("db.username");
             final String dbPassword = rawConfig.getString("db.password");
-            final DatabaseSettings databaseSettings = new DatabaseSettings(dbUrl, dbUsername, dbPassword);
+            final DatabaseSettings databaseSettings =
+                    new DatabaseSettings(dbUrl, dbUsername, dbPassword);
             LOGGER.debug("Loaded DatabaseSettings: {}.", databaseSettings);
 
             final String jwtSecretKey = rawConfig.getString("jwt.secretKey");
@@ -31,7 +32,8 @@ public class AppConfigLoader {
             final TokenSettings tokenSettings = new TokenSettings(jwtSecretKey, jwtIssuer);
             LOGGER.debug("Loaded TokenSettings: {}.", tokenSettings);
 
-            final AppConfig appConfig = new AppConfig(serverSettings, databaseSettings, tokenSettings);
+            final AppConfig appConfig =
+                    new AppConfig(serverSettings, databaseSettings, tokenSettings);
             LOGGER.info("Application configuration loaded succesfully.");
 
             return appConfig;

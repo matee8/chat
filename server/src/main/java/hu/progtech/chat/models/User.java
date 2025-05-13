@@ -26,7 +26,6 @@ public class User {
         this(0L, username, passwordHash, null);
     }
 
-
     public long id() {
         return id;
     }
@@ -45,8 +44,12 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {return true;}
-        if (o == null || getClass() != o.getClass()) {return false;}
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         User user = (User) o;
         return id != 0 && id == user.id;
     }
@@ -58,6 +61,8 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User{id=%d, username='%s', passwordHash='[REDACTED]', createdAt=%s", id, username, createdAt);
+        return String.format(
+                "User{id=%d, username='%s', passwordHash='[REDACTED]', createdAt=%s",
+                id, username, createdAt);
     }
 }

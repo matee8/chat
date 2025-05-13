@@ -8,7 +8,6 @@ import com.auth0.jwt.exceptions.InvalidClaimException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import hu.progtech.chat.config.AppConfig;
 import hu.progtech.chat.config.TokenSettings;
 import hu.progtech.chat.models.User;
 import java.util.Date;
@@ -35,7 +34,8 @@ public class TokenManager {
 
     public String generateToken(final User user) {
         if (user == null || user.id() == 0) {
-            throw new IllegalArgumentException("User must be valid and persisted (have an ID) to generate a token.");
+            throw new IllegalArgumentException(
+                    "User must be valid and persisted (have an ID) to generate a token.");
         }
 
         final Date now = new Date();

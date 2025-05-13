@@ -41,8 +41,12 @@ public class Message {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {return true;}
-        if (o == null || getClass() != o.getClass()) {return false;}
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Message message = (Message) o;
         return id != 0 && id == message.id;
     }
@@ -54,6 +58,8 @@ public class Message {
 
     @Override
     public String toString() {
-        return String.format("Message{id=%d, senderId=%d, content='%s', timestamp=%s", id, senderId, content, timestamp);
+        return String.format(
+                "Message{id=%d, senderId=%d, content='%s', timestamp=%s",
+                id, senderId, content, timestamp);
     }
 }
