@@ -1,14 +1,15 @@
 package hu.progtech.chat.models;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Message {
     private final long id;
     private final String sender;
     private final String content;
-    private final long timestamp;
+    private final LocalDateTime timestamp;
 
-    public Message(long id, String sender, String content, long timestamp) {
+    public Message(long id, String sender, String content, LocalDateTime timestamp) {
         this.id = id;
         this.sender = sender;
         this.content = content;
@@ -27,7 +28,7 @@ public class Message {
         return content;
     }
 
-    public long getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 

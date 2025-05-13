@@ -2,13 +2,9 @@ package hu.progtech.chat.repositories.core;
 
 import hu.progtech.chat.config.AppConfig;
 import hu.progtech.chat.config.DatabaseSettings;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,13 +18,7 @@ public class DatabaseManager {
 
     private DatabaseManager(AppConfig config) {
         this.settings = config.database();
-        try {
-            initDatabase();
-            logger.info("Database initialization successful.");
-        } catch (Exception e) {
-            logger.fatal("Database initialization failed.", e);
-            throw new RuntimeException("Could not initialize database.", e);
-        }
+        logger.info("Database initialization successful.");
     }
 
     public Connection getConnection() throws SQLException {
@@ -36,9 +26,10 @@ public class DatabaseManager {
                 settings.getUrl(), settings.getUsername(), settings.getPassword());
     }
 
-    public static synchronized void initialize(AppConfig config) {
+    public static synchronized void initialize(AppConfig config) throws IllegalArgumentException {
         if (instance == null) {
             if (config == null) {
+                logger.error("AppConfig is null during initialization.");
                 throw new IllegalArgumentException(
                         "AppConfig cannot be null during initialization.");
             }
@@ -48,53 +39,13 @@ public class DatabaseManager {
         }
     }
 
-    public static DatabaseManager getInstance() {
+    public static DatabaseManager getInstance() throws IllegalStateException {
         if (instance == null) {
+            logger.error("DatabaseManager singleton not initialized when calling getInstance().");
             throw new IllegalStateException(
                     "DatabaseManager singleton not initialized. Call initialize() first.");
         }
 
         return instance;
-    }
-
-    private void initDatabase() throws SQLException {
-        String schemaSql = loadSchemaSql();
-
-        if (schemaSql == null || schemaSql.trim().isEmpty()) {
-            logger.warn(
-                    "Schema file '{}' is empty or could not be read. "
-                            + "Skipping schema initialization.",
-                    SCHEMA_FILE);
-            return;
-        }
-
-        try (Connection connection = getConnection();
-                Statement stmt = connection.createStatement()) {
-            String[] sqlCommands = schemaSql.split(";\\s*");
-
-            for (String command : sqlCommands) {
-                if (command != null && !command.trim().isEmpty()) {
-                    logger.debug("Executing schema command: {}", command);
-                    stmt.execute(command);
-                }
-
-                logger.info("Database schema initialized succesfully.");
-            }
-        }
-    }
-
-    private String loadSchemaSql() {
-        try (InputStream is = DatabaseManager.class.getResourceAsStream(SCHEMA_FILE)) {
-            if (is == null) {
-                logger.error("Schema file '{}' not found in classpath.", SCHEMA_FILE);
-                return null;
-            }
-
-            byte[] allBytes = is.readAllBytes();
-            return new String(allBytes, StandardCharsets.UTF_8);
-        } catch (IOException ex) {
-            logger.error("Failed to read schema file '{}'", SCHEMA_FILE, ex);
-            return null;
-        }
     }
 }

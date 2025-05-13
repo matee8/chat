@@ -1,14 +1,20 @@
 package hu.progtech.chat.models;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class User {
-    private final long id;
+    private long id;
     private final String username;
     private final String passwordHash;
-    private final long createdAt;
+    private LocalDateTime createdAt;
 
-    public User(long id, String username, String passwordHash, long createdAt) {
+    public User(String username, String passwordHash) {
+        this.username = username;
+        this.passwordHash = passwordHash;
+    }
+
+    public User(long id, String username, String passwordHash, LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
         this.passwordHash = passwordHash;
@@ -19,6 +25,10 @@ public class User {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -27,8 +37,12 @@ public class User {
         return passwordHash;
     }
 
-    public long getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
