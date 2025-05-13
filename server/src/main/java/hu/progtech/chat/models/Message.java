@@ -11,11 +11,20 @@ public class Message {
 
     public Message(long id, long senderId, String content, LocalDateTime timestamp) {
         this.id = id;
+
         this.senderId = senderId;
+
         if (content == null || content.isBlank()) {
             throw new IllegalArgumentException("Message content cannot be null or blank.");
         }
+
+        if (content.length() > 1000) {
+            throw new IllegalArgumentException(
+                    "Message content exceeds maximum length of 1000 characters.");
+        }
+
         this.content = content;
+
         this.timestamp = timestamp;
     }
 
@@ -59,7 +68,7 @@ public class Message {
     @Override
     public String toString() {
         return String.format(
-                "Message{id=%d, senderId=%d, content='%s', timestamp=%s",
+                "Message{id=%d, senderId=%d, content='%s', timestamp=%s}",
                 id, senderId, content, timestamp);
     }
 }

@@ -11,14 +11,17 @@ public class User {
 
     public User(long id, String username, String passwordHash, LocalDateTime createdAt) {
         this.id = id;
+
         if (username == null || username.isBlank()) {
             throw new IllegalArgumentException("Username cannot be null or blank.");
         }
         this.username = username;
+
         if (passwordHash == null || passwordHash.isBlank()) {
             throw new IllegalArgumentException("Password hash cannot be null or blank.");
         }
         this.passwordHash = passwordHash;
+
         this.createdAt = createdAt;
     }
 

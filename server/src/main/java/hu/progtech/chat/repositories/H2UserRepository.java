@@ -97,7 +97,7 @@ public class H2UserRepository implements UserRepository {
 
     @Override
     public Optional<User> findById(final long id) throws RepositoryException {
-        final String sql = "SELECT * FROM users WHERE id = ?";
+        final String sql = "SELECT * FROM users WHERE user_id = ?";
 
         try (Connection conn = databaseManager.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
