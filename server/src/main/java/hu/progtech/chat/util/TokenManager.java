@@ -16,66 +16,67 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class TokenManager {
-    private static final Logger logger = LogManager.getLogger(TokenManager.class);
-    private static TokenManager instance;
+    private static final Logger LOGGER = LogManager.getLogger(TokenManager.class);
 
-    private final TokenSettings settings;
     private final Algorithm algorithm;
     private final JWTVerifier verifier;
+    private final TokenSettings settings;
 
-    private TokenManager(TokenSettings settings) {
+    public TokenManager(final TokenSettings settings) {
+        if (settings == null) {
+            LOGGER.error("TokenSettings cannot be null during TokenManager instantiation.");
+            throw new IllegalArgumentException("TokenSettings cannot be null.");
+        }
         this.settings = settings;
-        this.algorithm = Algorithm.HMAC256(settings.getSecretKey());
-        this.verifier = JWT.require(algorithm).withIssuer(settings.getIssuer()).build();
+        this.algorithm = Algorithm.HMAC256(settings.secretKey());
+        this.verifier = JWT.require(algorithm).withIssuer(settings.issuer()).build();
+        LOGGER.info("TokenManager initialized with issuer: {}", settings.issuer());
     }
 
-    public String generateToken(User user) {
-        Date now = new Date();
+    public String generateToken(final User user) {
+        if (user == null || user.id() == 0) {
+            throw new IllegalArgumentException("User must be valid and persisted (have an ID) to generate a token.");
+        }
 
+        final Date now = new Date();
+
+        LOGGER.info("Generating token for user ID: {}.", user.id());
         return JWT.create()
-                .withIssuer(settings.getIssuer())
-                .withSubject(Long.toString(user.getId()))
+                .withIssuer(settings.issuer())
+                .withSubject(Long.toString(user.id()))
                 .withIssuedAt(now)
                 .sign(algorithm);
     }
 
-    public long validateTokenAndGetClaims(String token) {
+    public long validateTokenAndGetClaims(final String token) throws TokenValidationException {
+        if (token == null || token.isBlank()) {
+            throw new TokenValidationException("Token cannot be null or empty.");
+        }
+
         try {
-            DecodedJWT decodedJwt = verifier.verify(token);
+            final DecodedJWT decodedJwt = verifier.verify(token);
+            final String subject = decodedJwt.getSubject();
+            if (subject == null) {
+                LOGGER.warn("JWT subject (user ID) is null in token.");
+                throw new TokenValidationException("JWT subject is missing.");
+            }
 
             return Long.parseLong(decodedJwt.getSubject());
         } catch (AlgorithmMismatchException e) {
-            logger.warn("JWT algorithm mismatch: " + e.getMessage());
+            LOGGER.warn("JWT algorithm mismatch: {}.", e.getMessage());
+            throw new IllegalArgumentException("JWT algorithm mismatch.", e);
         } catch (SignatureVerificationException e) {
-            logger.warn("JWT signature validation failed: " + e.getMessage());
+            LOGGER.warn("JWT signature validation failed: {}", e.getMessage());
+            throw new IllegalArgumentException("JWT signature validation failed.", e);
         } catch (InvalidClaimException e) {
-            logger.warn("JWT claims are invalid (e.g., issuer mismatch) " + e.getMessage());
+            LOGGER.warn("JWT claims are invalid (e.g., issuer mismatch): {}.", e.getMessage());
+            throw new IllegalArgumentException("JWT claims are invalid.", e);
         } catch (JWTVerificationException e) {
-            logger.warn("JWT verification failed: {}", e.getMessage());
+            LOGGER.warn("JWT verification failed: {}.", e.getMessage());
+            throw new IllegalArgumentException("JWT verification failed.", e);
+        } catch (NumberFormatException e) {
+            LOGGER.warn("JWT subject is not a valid user ID (long): {}.", e.getMessage());
+            throw new IllegalArgumentException("JWT subject is invalid.", e);
         }
-
-        throw new IllegalArgumentException("Token verification failed.");
-    }
-
-    public static synchronized void initialize(AppConfig config) throws IllegalArgumentException {
-        if (instance == null) {
-            if (config == null) {
-                throw new IllegalArgumentException(
-                        "AppConfig cannot be null during initialization.");
-            }
-            instance = new TokenManager(config.token());
-        } else {
-            logger.warn("TokenManager singleton already initialized.");
-        }
-    }
-
-    public static TokenManager getInstance() throws IllegalStateException {
-        if (instance == null) {
-            logger.error("TokenManager singleton not initialized when calling getInstance().");
-            throw new IllegalStateException(
-                    "TokenManager singleton not initialized. Call initialize() first.");
-        }
-
-        return instance;
     }
 }

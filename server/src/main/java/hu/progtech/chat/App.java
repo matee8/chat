@@ -17,10 +17,9 @@ public class App {
         AppConfig config = AppConfigLoader.loadConfig();
 
         try {
-            DatabaseManager.initialize(config);
-            TokenManager.initialize(config);
+            DatabaseManager databaseManager = new DatabaseManager(config.databaseSettings());
 
-            UserRepository userRepo = new H2UserRepository();
+            UserRepository userRepo = new H2UserRepository(databaseManager);
 
             String hashedPassword = PasswordHasher.hashPassword("test");
 
@@ -30,14 +29,12 @@ public class App {
 
             for (User elem : userRepo.findAll()) {
                 System.out.println(elem);
-                System.out.println(elem.getPasswordHash());
+                System.out.println(elem.passwordHash());
             }
 
-            MessageRepository messageRepo = new H2MessageRepository();
+            MessageRepository messageRepo = new H2MessageRepository(databaseManager);
 
-            user.setId(1);
-
-            Message message = new Message(user.getId(), "Sziasztok!");
+            Message message = new Message(user.id(), "Sziasztok!");
 
             messageRepo.save(message);
 
@@ -45,7 +42,7 @@ public class App {
                 System.out.println(elem);
             }
 
-            TokenManager tokenManager = TokenManager.getInstance();
+            TokenManager tokenManager = new TokenManager(config.tokenSettings());
 
             String token = tokenManager.generateToken(user);
 

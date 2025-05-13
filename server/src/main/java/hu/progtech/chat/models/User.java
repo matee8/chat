@@ -4,53 +4,51 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class User {
-    private long id;
+    private final long id;
     private final String username;
     private final String passwordHash;
-    private LocalDateTime createdAt;
-
-    public User(String username, String passwordHash) {
-        this.username = username;
-        this.passwordHash = passwordHash;
-    }
+    private final LocalDateTime createdAt;
 
     public User(long id, String username, String passwordHash, LocalDateTime createdAt) {
         this.id = id;
+        if (username == null || username.isBlank()) {
+            throw new IllegalArgumentException("Username cannot be null or blank.");
+        }
         this.username = username;
+        if (passwordHash == null || passwordHash.isBlank()) {
+            throw new IllegalArgumentException("Password hash cannot be null or blank.");
+        }
         this.passwordHash = passwordHash;
         this.createdAt = createdAt;
     }
 
-    public long getId() {
+    public User(String username, String passwordHash) {
+        this(0L, username, passwordHash, null);
+    }
+
+
+    public long id() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
+    public String username() {
         return username;
     }
 
-    public String getPasswordHash() {
+    public String passwordHash() {
         return passwordHash;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public LocalDateTime createdAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
         User user = (User) o;
-        return id == user.id;
+        return id != 0 && id == user.id;
     }
 
     @Override
@@ -60,12 +58,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{id = '"
-                + id
-                + "', username = '"
-                + username
-                + "', createdAt = '"
-                + createdAt
-                + "'}";
+        return String.format("User{id=%d, username='%s', passwordHash='[REDACTED]', createdAt=%s", id, username, createdAt);
     }
 }

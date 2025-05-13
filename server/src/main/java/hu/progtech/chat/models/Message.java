@@ -4,53 +4,47 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Message {
-    private long id;
+    private final long id;
     private final long senderId;
     private final String content;
-    private LocalDateTime timestamp;
-
-    public Message(long senderId, String content) {
-        this.senderId = senderId;
-        this.content = content;
-    }
+    private final LocalDateTime timestamp;
 
     public Message(long id, long senderId, String content, LocalDateTime timestamp) {
         this.id = id;
         this.senderId = senderId;
+        if (content == null || content.isBlank()) {
+            throw new IllegalArgumentException("Message content cannot be null or blank.");
+        }
         this.content = content;
         this.timestamp = timestamp;
     }
 
-    public long getId() {
+    public Message(long senderId, String content) {
+        this(0L, senderId, content, null);
+    }
+
+    public long id() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getSenderId() {
+    public long senderId() {
         return senderId;
     }
 
-    public String getContent() {
+    public String content() {
         return content;
     }
 
-    public LocalDateTime getTimestamp() {
+    public LocalDateTime timestamp() {
         return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
         Message message = (Message) o;
-        return id == message.id;
+        return id != 0 && id == message.id;
     }
 
     @Override
@@ -60,14 +54,6 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message{id = '"
-                + id
-                + "', sender = '"
-                + senderId
-                + "', content = '"
-                + content
-                + "', timestamp = '"
-                + timestamp
-                + "'}";
+        return String.format("Message{id=%d, senderId=%d, content='%s', timestamp=%s", id, senderId, content, timestamp);
     }
 }
