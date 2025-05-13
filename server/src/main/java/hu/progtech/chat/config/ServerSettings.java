@@ -13,6 +13,6 @@ public final class ServerSettings {
 
     @Override
     public String toString() {
-        return "ServerSettings{" + " port = '" + port + "'" + "}";
+        return "ServerSettings{port = '" + port + "'}";
     }
 }

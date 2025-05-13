@@ -25,16 +25,12 @@ public final class DatabaseSettings {
 
     @Override
     public String toString() {
-        return "DatabaseSettings{"
-                + " url = '"
+        return "DatabaseSettings{url = '"
                 + url
-                + "',"
-                + " username = '"
+                + "', username = '"
                 + username
-                + "',"
-                + " password = '"
+                + "', password = '"
                 + password
-                + "'"
-                + "}";
+                + "'}";
     }
 }

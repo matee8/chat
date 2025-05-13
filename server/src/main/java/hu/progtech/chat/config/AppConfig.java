@@ -20,12 +20,10 @@ public final class AppConfig {
     @Override
     public String toString() {
         return "AppConfig{"
-                + " serverSettings = '"
+                + "serverSettings = '"
                 + serverSettings
-                + "',"
-                + " databaseSettings = '"
+                + "', databaseSettings = '"
                 + databaseSettings
-                + "' "
-                + "}";
+                + "'}";
     }
 }

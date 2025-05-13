@@ -60,16 +60,12 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{"
-                + " id = '"
+        return "User{id = '"
                 + id
-                + "', "
-                + " username = '"
+                + "', username = '"
                 + username
-                + "', "
-                + " createdAt = '"
+                + "', createdAt = '"
                 + createdAt
-                + "'"
-                + "}";
+                + "'}";
     }
 }
