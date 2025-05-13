@@ -5,7 +5,10 @@ public final class AppConfig {
     private final DatabaseSettings databaseSettings;
     private final TokenSettings tokenSettings;
 
-    public AppConfig(ServerSettings serverSettings, DatabaseSettings databaseSettings, TokenSettings tokenSettings) {
+    public AppConfig(
+            ServerSettings serverSettings,
+            DatabaseSettings databaseSettings,
+            TokenSettings tokenSettings) {
         this.serverSettings = serverSettings;
         this.databaseSettings = databaseSettings;
         this.tokenSettings = tokenSettings;
@@ -18,7 +21,7 @@ public final class AppConfig {
     public DatabaseSettings database() {
         return databaseSettings;
     }
-    
+
     public TokenSettings token() {
         return tokenSettings;
     }
