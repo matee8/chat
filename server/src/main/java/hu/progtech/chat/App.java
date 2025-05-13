@@ -1,10 +1,10 @@
 package hu.progtech.chat;
 
-/**
- * Hello world!
- */
+import hu.progtech.chat.config.AppConfig;
+import hu.progtech.chat.config.AppConfigLoader;
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        AppConfig config = AppConfigLoader.loadConfig();
     }
 }
