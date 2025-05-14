@@ -33,8 +33,7 @@ public class App {
 
             MessageRepository messageRepository = new H2MessageRepository(databaseManager);
 
-            ChatService chatService =
-                    new ChatServiceImpl(messageRepository, userRepository);
+            ChatService chatService = new ChatServiceImpl(messageRepository, userRepository);
 
             chatService.sendMessage(user.id(), "Hi!");
 

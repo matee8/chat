@@ -1,16 +1,14 @@
 package hu.progtech.chat.services;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import hu.progtech.chat.models.Message;
 import hu.progtech.chat.models.User;
 import hu.progtech.chat.repositories.MessageRepository;
 import hu.progtech.chat.repositories.RepositoryException;
 import hu.progtech.chat.repositories.UserRepository;
+import java.util.List;
+import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ChatServiceImpl implements ChatService {
     private static final Logger LOGGER = LogManager.getLogger(ChatServiceImpl.class);
@@ -18,7 +16,8 @@ public class ChatServiceImpl implements ChatService {
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
 
-    public ChatServiceImpl(final MessageRepository messageRepository, final UserRepository userRepository) {
+    public ChatServiceImpl(
+            final MessageRepository messageRepository, final UserRepository userRepository) {
         if (messageRepository == null) {
             throw new IllegalArgumentException("MessageRepository cannot be null.");
         }
@@ -49,13 +48,24 @@ public class ChatServiceImpl implements ChatService {
             final Message newMessage = new Message(senderId, content);
             final Message savedMessage = messageRepository.save(newMessage);
 
-            LOGGER.info("Message sent successfully by User ID {}. Message ID: {}", senderId, savedMessage.id());
+            LOGGER.info(
+                    "Message sent successfully by User ID {}. Message ID: {}",
+                    senderId,
+                    savedMessage.id());
             return savedMessage;
         } catch (RepositoryException e) {
-            LOGGER.error("Repository error while sending message for User ID {}: {}.", senderId, e.getMessage(), e);
+            LOGGER.error(
+                    "Repository error while sending message for User ID {}: {}.",
+                    senderId,
+                    e.getMessage(),
+                    e);
             throw new ServiceException("Failed to send message due to a system error.", e);
         } catch (IllegalArgumentException e) {
-            LOGGER.error("Invalid argument while creating message for User ID {}: {}.", senderId, e.getMessage(), e);
+            LOGGER.error(
+                    "Invalid argument while creating message for User ID {}: {}.",
+                    senderId,
+                    e.getMessage(),
+                    e);
             throw new ServiceException("Failed to send message due to a system error.", e);
         }
     }
