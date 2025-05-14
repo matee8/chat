@@ -35,13 +35,13 @@ public class App {
             AuthService authService = new AuthServiceImpl(userRepository, tokenManager);
 
             ChatService chatService =
-                    new ChatServiceImpl(messageRepository, userRepository, eventBus);
+                    new ChatServiceImpl(messageRepository, userRepository, eventBus, tokenManager);
 
             User user = authService.register("mate", "password");
 
             String token = authService.login(user.username(), "password");
 
-            chatService.sendMessage(user.id(), "Hi!");
+            chatService.sendMessage(token, "Hi!");
 
             for (Message message : chatService.getChatHistory()) {
                 System.out.println(message);

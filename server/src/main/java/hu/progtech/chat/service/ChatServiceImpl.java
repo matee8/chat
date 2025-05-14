@@ -6,6 +6,9 @@ import hu.progtech.chat.model.User;
 import hu.progtech.chat.repository.MessageRepository;
 import hu.progtech.chat.repository.RepositoryException;
 import hu.progtech.chat.repository.UserRepository;
+import hu.progtech.chat.util.TokenManager;
+import hu.progtech.chat.util.TokenValidationException;
+
 import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
@@ -16,12 +19,14 @@ public class ChatServiceImpl implements ChatService {
 
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
+    private final TokenManager tokenManager;
     private final ChatEventBus eventBus;
 
     public ChatServiceImpl(
             final MessageRepository messageRepository,
             final UserRepository userRepository,
-            ChatEventBus eventBus) {
+            final ChatEventBus eventBus,
+            final TokenManager tokenManager) {
         if (messageRepository == null) {
             throw new IllegalArgumentException("MessageRepository cannot be null.");
         }
@@ -34,15 +39,28 @@ public class ChatServiceImpl implements ChatService {
             throw new IllegalArgumentException("ChatEventBus cannot be null.");
         }
 
+        if (tokenManager == null) {
+            throw new IllegalArgumentException("TokenManager cannot be null.");
+        }
+
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
         this.eventBus = eventBus;
+        this.tokenManager = tokenManager;
     }
 
     @Override
-    public Message sendMessage(final long senderId, final String content) throws ServiceException {
+    public Message sendMessage(final String token, final String content) throws ServiceException {
         if (content == null || content.isBlank()) {
             throw new ServiceException("Message cannot be empty.");
+        }
+
+        final long senderId;
+        try {
+            senderId = tokenManager.validateTokenAndGetClaims(token);
+        } catch (IllegalArgumentException | TokenValidationException e) {
+            LOGGER.error("Error extracing ID from token: {}.", e.getMessage(), e);
+            throw new ServiceException("Failed to extract ID from token.", e);
         }
 
         try {
