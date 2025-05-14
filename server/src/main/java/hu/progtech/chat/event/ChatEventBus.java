@@ -1,12 +1,11 @@
-package hu.progtech.chat.events;
+package hu.progtech.chat.event;
 
 import hu.progtech.chat.model.Message;
-import java.util.function.Consumer;
 
 public interface ChatEventBus {
-    void subscribe(String topic, Consumer<Message> listener);
+    void subscribe(String topic, Subscriber listener);
 
-    void unsubscribe(String topic, Consumer<Message> listener);
+    void unsubscribe(String topic, Subscriber listener);
 
     void publish(String topic, Message message);
 }

@@ -1,6 +1,6 @@
-package hu.progtech.chat.events;
+package hu.progtech.chat.event;
 
-import hu.progtech.chat.models.Message;
+import hu.progtech.chat.model.Message;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,65 +11,65 @@ import org.apache.logging.log4j.Logger;
 
 public class InMemoryChatEventBus implements ChatEventBus {
     private static final Logger LOGGER = LogManager.getLogger(InMemoryChatEventBus.class);
-    private final Map<String, List<Consumer<Message>>> listenersByTopic = new ConcurrentHashMap<>();
+    private final Map<String, List<Subscriber>> subscribersByTopic = new ConcurrentHashMap<>();
 
     @Override
-    public void subscribe(final String topic, final Consumer<Message> listener) {
-        List<Consumer<Message>> listeners = listenersByTopic.get(topic);
-        if (listeners == null) {
-            listeners = new CopyOnWriteArrayList<>();
-            listenersByTopic.put(topic, listeners);
+    public void subscribe(final String topic, final Subscriber subscriber) {
+        List<Subscriber> subscribers = subscribersByTopic.get(topic);
+        if (subscribers == null) {
+            subscribers = new CopyOnWriteArrayList<>();
+            subscribersByTopic.put(topic, subscribers);
         }
 
-        listeners.add(listener);
+        subscribers.add(subscriber);
 
-        LOGGER.info("Listener {} subscribed to topic '{}'.", listener, topic);
+        LOGGER.info("Subscriber {} subscribed to topic '{}'.", subscriber, topic);
     }
 
     @Override
-    public void unsubscribe(final String topic, final Consumer<Message> listener) {
-        final List<Consumer<Message>> listeners = listenersByTopic.get(topic);
-        if (listeners == null) {
+    public void unsubscribe(final String topic, final Subscriber subscriber) {
+        final List<Subscriber> subscribers = subscribersByTopic.get(topic);
+        if (subscribers == null) {
             LOGGER.warn(
-                    "Listener {} tried to unsubscribe from topic '{}', which does not exist.",
-                    listener,
+                    "Subscriber {} tried to unsubscribe from topic '{}', which does not exist.",
+                    subscriber,
                     topic);
             return;
         }
 
-        listeners.remove(listener);
+        subscribers.remove(subscriber);
 
-        if (listeners.isEmpty()) {
-            listenersByTopic.remove(topic);
+        if (subscribers.isEmpty()) {
+            subscribersByTopic.remove(topic);
         }
 
-        LOGGER.info("Listener {} unsubscribed from topic '{}'.", listener, topic);
+        LOGGER.info("Subscriber {} unsubscribed from topic '{}'.", subscriber, topic);
     }
 
     @Override
     public void publish(final String topic, final Message message) {
-        final List<Consumer<Message>> topicListeners = listenersByTopic.get(topic);
+        final List<Subscriber> subscribers = subscribersByTopic.get(topic);
 
-        if (topicListeners == null || topicListeners.isEmpty()) {
+        if (subscribers == null || subscribers.isEmpty()) {
             LOGGER.info(
-                    "No listeners found for topic '{}' when publishing message with ID {}.",
+                    "No subscribers found for topic '{}' when publishing message with ID {}.",
                     topic,
                     message.id());
             return;
         }
 
         LOGGER.info(
-                "Publishing message with ID {} to {} listener(s) on topic '{}'.",
+                "Publishing message with ID {} to {} subscriber(s) on topic '{}'.",
                 message.id(),
-                topicListeners.size(),
+                subscribers.size(),
                 topic);
 
-        for (Consumer<Message> listener : topicListeners) {
+        for (Subscriber listener : subscribers) {
             try {
                 listener.accept(message);
             } catch (Exception e) {
                 LOGGER.error(
-                        "Error notifying listener {} on topic '{}': {}.",
+                        "Error notifying subscriber {} on topic '{}': {}.",
                         listener,
                         topic,
                         e.getMessage(),
