@@ -1,6 +1,6 @@
-package hu.progtech.chat.services;
+package hu.progtech.chat.service;
 
-import hu.progtech.chat.models.Message;
+import hu.progtech.chat.model.Message;
 import java.util.List;
 
 public interface ChatService {

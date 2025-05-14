@@ -2,20 +2,20 @@ package hu.progtech.chat;
 
 import hu.progtech.chat.config.AppConfig;
 import hu.progtech.chat.config.AppConfigLoader;
-import hu.progtech.chat.events.ChatEventBus;
-import hu.progtech.chat.events.InMemoryChatEventBus;
-import hu.progtech.chat.models.Message;
-import hu.progtech.chat.models.User;
+import hu.progtech.chat.event.ChatEventBus;
+import hu.progtech.chat.event.InMemoryChatEventBus;
+import hu.progtech.chat.model.Message;
+import hu.progtech.chat.model.User;
 import hu.progtech.chat.networking.ClientSubscriptionManager;
-import hu.progtech.chat.repositories.H2MessageRepository;
-import hu.progtech.chat.repositories.H2UserRepository;
-import hu.progtech.chat.repositories.MessageRepository;
-import hu.progtech.chat.repositories.UserRepository;
-import hu.progtech.chat.repositories.core.DatabaseManager;
-import hu.progtech.chat.services.AuthService;
-import hu.progtech.chat.services.AuthServiceImpl;
-import hu.progtech.chat.services.ChatService;
-import hu.progtech.chat.services.ChatServiceImpl;
+import hu.progtech.chat.repository.H2MessageRepository;
+import hu.progtech.chat.repository.H2UserRepository;
+import hu.progtech.chat.repository.MessageRepository;
+import hu.progtech.chat.repository.UserRepository;
+import hu.progtech.chat.service.AuthService;
+import hu.progtech.chat.service.AuthServiceImpl;
+import hu.progtech.chat.service.ChatService;
+import hu.progtech.chat.service.ChatServiceImpl;
+import hu.progtech.chat.util.DatabaseManager;
 import hu.progtech.chat.util.TokenManager;
 
 public class App {

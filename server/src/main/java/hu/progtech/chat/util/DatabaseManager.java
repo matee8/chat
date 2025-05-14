@@ -1,4 +1,4 @@
-package hu.progtech.chat.repositories.core;
+package hu.progtech.chat.util;
 
 import hu.progtech.chat.config.DatabaseSettings;
 import java.sql.Connection;

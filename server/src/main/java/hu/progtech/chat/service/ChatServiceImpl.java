@@ -1,12 +1,12 @@
-package hu.progtech.chat.services;
+package hu.progtech.chat.service;
 
-import hu.progtech.chat.events.ChatEventBus;
-import hu.progtech.chat.models.Message;
-import hu.progtech.chat.models.User;
+import hu.progtech.chat.event.ChatEventBus;
+import hu.progtech.chat.model.Message;
+import hu.progtech.chat.model.User;
 import hu.progtech.chat.networking.ClientSubscriptionManager;
-import hu.progtech.chat.repositories.MessageRepository;
-import hu.progtech.chat.repositories.RepositoryException;
-import hu.progtech.chat.repositories.UserRepository;
+import hu.progtech.chat.repository.MessageRepository;
+import hu.progtech.chat.repository.RepositoryException;
+import hu.progtech.chat.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;

@@ -1,4 +1,4 @@
-package hu.progtech.chat.services;
+package hu.progtech.chat.service;
 
 public class ServiceException extends RuntimeException {
     public ServiceException(String msg, Throwable cause) {

@@ -1,7 +1,7 @@
-package hu.progtech.chat.repositories;
+package hu.progtech.chat.repository;
 
-import hu.progtech.chat.models.User;
-import hu.progtech.chat.repositories.core.DatabaseManager;
+import hu.progtech.chat.model.User;
+import hu.progtech.chat.util.DatabaseManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

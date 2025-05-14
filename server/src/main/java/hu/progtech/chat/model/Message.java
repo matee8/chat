@@ -1,4 +1,4 @@
-package hu.progtech.chat.models;
+package hu.progtech.chat.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

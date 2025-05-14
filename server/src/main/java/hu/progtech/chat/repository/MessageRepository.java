@@ -1,6 +1,6 @@
-package hu.progtech.chat.repositories;
+package hu.progtech.chat.repository;
 
-import hu.progtech.chat.models.Message;
+import hu.progtech.chat.model.Message;
 import java.util.List;
 
 public interface MessageRepository {

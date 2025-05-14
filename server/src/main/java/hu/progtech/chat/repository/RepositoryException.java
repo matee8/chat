@@ -1,4 +1,4 @@
-package hu.progtech.chat.repositories;
+package hu.progtech.chat.repository;
 
 public class RepositoryException extends RuntimeException {
     public RepositoryException(String msg, Throwable cause) {

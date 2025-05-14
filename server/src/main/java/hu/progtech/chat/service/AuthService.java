@@ -1,6 +1,6 @@
-package hu.progtech.chat.services;
+package hu.progtech.chat.service;
 
-import hu.progtech.chat.models.User;
+import hu.progtech.chat.model.User;
 
 public interface AuthService {
     User register(String username, String password) throws ServiceException;

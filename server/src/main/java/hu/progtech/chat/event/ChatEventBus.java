@@ -1,6 +1,6 @@
 package hu.progtech.chat.events;
 
-import hu.progtech.chat.models.Message;
+import hu.progtech.chat.model.Message;
 import java.util.function.Consumer;
 
 public interface ChatEventBus {

@@ -1,8 +1,8 @@
-package hu.progtech.chat.services;
+package hu.progtech.chat.service;
 
-import hu.progtech.chat.models.User;
-import hu.progtech.chat.repositories.RepositoryException;
-import hu.progtech.chat.repositories.UserRepository;
+import hu.progtech.chat.model.User;
+import hu.progtech.chat.repository.RepositoryException;
+import hu.progtech.chat.repository.UserRepository;
 import hu.progtech.chat.util.PasswordHasher;
 import hu.progtech.chat.util.TokenManager;
 import hu.progtech.chat.util.TokenValidationException;
