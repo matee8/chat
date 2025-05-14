@@ -14,24 +14,34 @@ public class InMemoryChatEventBus implements EventBus {
     private final Map<String, List<Consumer<Message>>> listenersByTopic = new ConcurrentHashMap<>();
 
     @Override
-    public void subscribe(String topic, Consumer<Message> listener) {
-        listenersByTopic.computeIfAbsent(topic, k -> new CopyOnWriteArrayList<>()).add(listener);
+    public void subscribe(final String topic, final Consumer<Message> listener) {
+        final List<Consumer<Message>> listeners = listenersByTopic.get(topic);
+        if (listeners == null) {
+            listeners = new CopyOnWriteArrayList<>();
+            listenersByTopic.put(topic, listeners);
+        }
+
+        listeners.add(listener);
+
         LOGGER.info("Listener {} subscribed to topic '{}'.", listener, topic);
     }
 
     @Override
-    public void unsubscribe(String topic, Consumer<Message> listener) {
-        listenersByTopic.computeIfPresent(
-                topic,
-                (k, listeners) -> {
-                    listeners.remove(listener);
-                    return listeners.isEmpty() ? null : listeners;
-                });
-        LOGGER.info("Listener {} unsubscribed from topic '{}'.", listener, topic);
+    public void unsubscribe(final String topic, final Consumer<Message> listener) {
+        final List<Consumer<Message>> listeners = listenersByTopic.get(topic);
+        if (listeners != null) {
+            listeners.remove(listener);
+
+            if (listeners.isEmpty()) {
+                listenersByTopic.remove(topic);
+            }
+
+            LOGGER.info("Listener {} unsubscribed from topic '{}'.", listener, topic);
+        }
     }
 
     @Override
-    public void publish(String topic, Message message) {
+    public void publish(final String topic, final Message message) {
         final List<Consumer<Message>> topicListeners = listenersByTopic.get(topic);
 
         if (topicListeners == null || topicListeners.isEmpty()) {
