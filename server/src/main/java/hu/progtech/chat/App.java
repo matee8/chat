@@ -2,8 +2,11 @@ package hu.progtech.chat;
 
 import hu.progtech.chat.config.AppConfig;
 import hu.progtech.chat.config.AppConfigLoader;
+import hu.progtech.chat.events.ChatEventBus;
+import hu.progtech.chat.events.InMemoryChatEventBus;
 import hu.progtech.chat.models.Message;
 import hu.progtech.chat.models.User;
+import hu.progtech.chat.networking.ClientSubscriptionManager;
 import hu.progtech.chat.repositories.H2MessageRepository;
 import hu.progtech.chat.repositories.H2UserRepository;
 import hu.progtech.chat.repositories.MessageRepository;
@@ -17,23 +20,39 @@ import hu.progtech.chat.util.TokenManager;
 
 public class App {
     public static void main(String[] args) {
-        AppConfig config = AppConfigLoader.loadConfig();
-        DatabaseManager databaseManager = new DatabaseManager(config.databaseSettings());
-
         try {
+            AppConfig config = AppConfigLoader.loadConfig();
+
+            ChatEventBus eventBus = new InMemoryChatEventBus();
+
+            eventBus.subscribe(
+                    ClientSubscriptionManager.GLOBAL_CHAT_TOPIC,
+                    m -> {
+                        System.out.println("Listener #1: " + m);
+                    });
+
+            eventBus.subscribe(
+                    ClientSubscriptionManager.GLOBAL_CHAT_TOPIC,
+                    m -> {
+                        System.out.println("Listener #2: " + m);
+                    });
+
+            DatabaseManager databaseManager = new DatabaseManager(config.databaseSettings());
+
             UserRepository userRepository = new H2UserRepository(databaseManager);
+
+            MessageRepository messageRepository = new H2MessageRepository(databaseManager);
 
             TokenManager tokenManager = new TokenManager(config.tokenSettings());
 
             AuthService authService = new AuthServiceImpl(userRepository, tokenManager);
 
+            ChatService chatService =
+                    new ChatServiceImpl(messageRepository, userRepository, eventBus);
+
             User user = authService.register("mate", "password");
 
             String token = authService.login(user.username(), "password");
-
-            MessageRepository messageRepository = new H2MessageRepository(databaseManager);
-
-            ChatService chatService = new ChatServiceImpl(messageRepository, userRepository);
 
             chatService.sendMessage(user.id(), "Hi!");
 

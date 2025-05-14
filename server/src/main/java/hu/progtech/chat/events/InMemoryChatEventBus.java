@@ -9,13 +9,13 @@ import java.util.function.Consumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class InMemoryChatEventBus implements EventBus {
+public class InMemoryChatEventBus implements ChatEventBus {
     private static final Logger LOGGER = LogManager.getLogger(InMemoryChatEventBus.class);
     private final Map<String, List<Consumer<Message>>> listenersByTopic = new ConcurrentHashMap<>();
 
     @Override
     public void subscribe(final String topic, final Consumer<Message> listener) {
-        final List<Consumer<Message>> listeners = listenersByTopic.get(topic);
+        List<Consumer<Message>> listeners = listenersByTopic.get(topic);
         if (listeners == null) {
             listeners = new CopyOnWriteArrayList<>();
             listenersByTopic.put(topic, listeners);
@@ -29,15 +29,21 @@ public class InMemoryChatEventBus implements EventBus {
     @Override
     public void unsubscribe(final String topic, final Consumer<Message> listener) {
         final List<Consumer<Message>> listeners = listenersByTopic.get(topic);
-        if (listeners != null) {
-            listeners.remove(listener);
-
-            if (listeners.isEmpty()) {
-                listenersByTopic.remove(topic);
-            }
-
-            LOGGER.info("Listener {} unsubscribed from topic '{}'.", listener, topic);
+        if (listeners == null) {
+            LOGGER.warn(
+                    "Listener {} tried to unsubscribe from topic '{}', which does not exist.",
+                    listener,
+                    topic);
+            return;
         }
+
+        listeners.remove(listener);
+
+        if (listeners.isEmpty()) {
+            listenersByTopic.remove(topic);
+        }
+
+        LOGGER.info("Listener {} unsubscribed from topic '{}'.", listener, topic);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package hu.progtech.chat.services;
 
+import hu.progtech.chat.events.ChatEventBus;
 import hu.progtech.chat.models.Message;
 import hu.progtech.chat.models.User;
+import hu.progtech.chat.networking.ClientSubscriptionManager;
 import hu.progtech.chat.repositories.MessageRepository;
 import hu.progtech.chat.repositories.RepositoryException;
 import hu.progtech.chat.repositories.UserRepository;
@@ -15,9 +17,12 @@ public class ChatServiceImpl implements ChatService {
 
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
+    private final ChatEventBus eventBus;
 
     public ChatServiceImpl(
-            final MessageRepository messageRepository, final UserRepository userRepository) {
+            final MessageRepository messageRepository,
+            final UserRepository userRepository,
+            ChatEventBus eventBus) {
         if (messageRepository == null) {
             throw new IllegalArgumentException("MessageRepository cannot be null.");
         }
@@ -26,8 +31,13 @@ public class ChatServiceImpl implements ChatService {
             throw new IllegalArgumentException("UserRepository cannot be null.");
         }
 
+        if (eventBus == null) {
+            throw new IllegalArgumentException("ChatEventBus cannot be null.");
+        }
+
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
+        this.eventBus = eventBus;
     }
 
     @Override
@@ -52,6 +62,12 @@ public class ChatServiceImpl implements ChatService {
                     "Message sent successfully by User ID {}. Message ID: {}",
                     senderId,
                     savedMessage.id());
+
+            eventBus.publish(ClientSubscriptionManager.GLOBAL_CHAT_TOPIC, savedMessage);
+            LOGGER.debug(
+                    "Published message {} to event bus on topic {}.",
+                    savedMessage,
+                    ClientSubscriptionManager.GLOBAL_CHAT_TOPIC);
             return savedMessage;
         } catch (RepositoryException e) {
             LOGGER.error(
