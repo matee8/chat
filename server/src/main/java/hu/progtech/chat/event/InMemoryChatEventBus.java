@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Consumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -66,7 +65,7 @@ public class InMemoryChatEventBus implements ChatEventBus {
 
         for (Subscriber listener : subscribers) {
             try {
-                listener.accept(message);
+                listener.onMessage(message);
             } catch (Exception e) {
                 LOGGER.error(
                         "Error notifying subscriber {} on topic '{}': {}.",

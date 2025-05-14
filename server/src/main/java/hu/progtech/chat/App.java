@@ -6,7 +6,6 @@ import hu.progtech.chat.event.ChatEventBus;
 import hu.progtech.chat.event.InMemoryChatEventBus;
 import hu.progtech.chat.model.Message;
 import hu.progtech.chat.model.User;
-import hu.progtech.chat.networking.ClientSubscriptionManager;
 import hu.progtech.chat.repository.H2MessageRepository;
 import hu.progtech.chat.repository.H2UserRepository;
 import hu.progtech.chat.repository.MessageRepository;
@@ -24,18 +23,6 @@ public class App {
             AppConfig config = AppConfigLoader.loadConfig();
 
             ChatEventBus eventBus = new InMemoryChatEventBus();
-
-            eventBus.subscribe(
-                    ClientSubscriptionManager.GLOBAL_CHAT_TOPIC,
-                    m -> {
-                        System.out.println("Listener #1: " + m);
-                    });
-
-            eventBus.subscribe(
-                    ClientSubscriptionManager.GLOBAL_CHAT_TOPIC,
-                    m -> {
-                        System.out.println("Listener #2: " + m);
-                    });
 
             DatabaseManager databaseManager = new DatabaseManager(config.databaseSettings());
 

@@ -3,7 +3,6 @@ package hu.progtech.chat.service;
 import hu.progtech.chat.event.ChatEventBus;
 import hu.progtech.chat.model.Message;
 import hu.progtech.chat.model.User;
-import hu.progtech.chat.networking.ClientSubscriptionManager;
 import hu.progtech.chat.repository.MessageRepository;
 import hu.progtech.chat.repository.RepositoryException;
 import hu.progtech.chat.repository.UserRepository;
@@ -63,11 +62,9 @@ public class ChatServiceImpl implements ChatService {
                     senderId,
                     savedMessage.id());
 
-            eventBus.publish(ClientSubscriptionManager.GLOBAL_CHAT_TOPIC, savedMessage);
+            eventBus.publish("globalRoom", savedMessage);
             LOGGER.debug(
-                    "Published message {} to event bus on topic {}.",
-                    savedMessage,
-                    ClientSubscriptionManager.GLOBAL_CHAT_TOPIC);
+                    "Published message {} to event bus on topic {}.", savedMessage, "globalRoom");
             return savedMessage;
         } catch (RepositoryException e) {
             LOGGER.error(

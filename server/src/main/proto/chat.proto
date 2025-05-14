@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package hu.progtech.chat.proto;
+
+option java_package = "hu.progtech.chat.proto";
+option java_multiple_files = true;
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message RegisterResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+  string message = 2;
+  string token = 3;
+}
+
+message SendMessageRequest {
+  string token = 1;
+  string content = 2;
+}
+
+message MessageEvent {
+  string messageId = 1;
+  string senderName = 2;
+  string content = 3;
+  int64 timestamp = 4;
+}
+
+message HistoryRequest {
+  string token = 1;
+}
+
+message HistoryResponse {
+  repeated MessageEvent messages = 1;
+}
+
+message Request {
+  oneof payload {
+    RegisterRequest registerRequest = 1;
+    LoginRequest loginRequest = 2;
+    SendMessageRequest sendMessageRequest = 3;
+    HistoryRequest historyRequest = 4;
+  }
+}
+
+message Response {
+  oneof payload {
+    RegisterResponse registerResponse = 1;
+    LoginResponse loginResponse = 2;
+    MessageEvent messageEvent = 3;
+    HistoryResponse historyResponse = 4;
+  }
+}
