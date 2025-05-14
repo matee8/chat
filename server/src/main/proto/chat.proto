@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package hu.progtech.chat.proto;
 
+import "google/protobuf/empty.proto";
+
 option java_package = "hu.progtech.chat.proto";
 option java_multiple_files = true;
 
@@ -38,28 +40,13 @@ message MessageEvent {
   int64 timestamp = 4;
 }
 
-message HistoryRequest {
+message SubscribeRequest {
   string token = 1;
 }
 
-message HistoryResponse {
-  repeated MessageEvent messages = 1;
-}
-
-message Request {
-  oneof payload {
-    RegisterRequest registerRequest = 1;
-    LoginRequest loginRequest = 2;
-    SendMessageRequest sendMessageRequest = 3;
-    HistoryRequest historyRequest = 4;
-  }
-}
-
-message Response {
-  oneof payload {
-    RegisterResponse registerResponse = 1;
-    LoginResponse loginResponse = 2;
-    MessageEvent messageEvent = 3;
-    HistoryResponse historyResponse = 4;
-  }
+service ChatService {
+  rpc Register(RegisterRequest) returns (RegisterResponse) {}
+  rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc SendMessage(SendMessageRequest) returns (google.protobuf.Empty) {}
+  rpc Subscribe(SubscribeRequest) returns (stream MessageEvent) {}
 }
