@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package hu.progtech.chat.proto;
 
-import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
 option java_package = "hu.progtech.chat.proto";
 option java_multiple_files = true;
@@ -33,11 +33,16 @@ message SendMessageRequest {
   string content = 2;
 }
 
+message SendMessageResponse {
+  bool success = 1;
+  string message = 2;
+}
+
 message MessageEvent {
-  string messageId = 1;
+  int64 messageId = 1;
   string senderName = 2;
   string content = 3;
-  int64 timestamp = 4;
+  google.protobuf.Timestamp timestamp = 4;
 }
 
 message SubscribeRequest {
@@ -47,6 +52,6 @@ message SubscribeRequest {
 service ChatService {
   rpc Register(RegisterRequest) returns (RegisterResponse) {}
   rpc Login(LoginRequest) returns (LoginResponse) {}
-  rpc SendMessage(SendMessageRequest) returns (google.protobuf.Empty) {}
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse) {}
   rpc Subscribe(SubscribeRequest) returns (stream MessageEvent) {}
 }
