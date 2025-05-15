@@ -8,7 +8,6 @@ import hu.progtech.chat.repository.RepositoryException;
 import hu.progtech.chat.repository.UserRepository;
 import hu.progtech.chat.util.TokenManager;
 import hu.progtech.chat.util.TokenValidationException;
-
 import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
@@ -113,6 +112,37 @@ public class ChatServiceImpl implements ChatService {
         } catch (RepositoryException e) {
             LOGGER.error("Repository error while fetching chat history: {}.", e.getMessage(), e);
             throw new ServiceException("Failed to send message due to a system error.", e);
+        }
+    }
+
+    @Override
+    public String getUsernameForMessage(final Message message) throws ServiceException {
+        try {
+            LOGGER.info("Fetching sender username for message.");
+
+            Optional<User> userOptional = userRepository.findById(message.senderId());
+            if (userOptional.isEmpty()) {
+                LOGGER.warn(
+                        "Send message failed: Sender with ID {} not found.", message.senderId());
+                throw new ServiceException("Sender user not found. Cannot send message.");
+            }
+            User user = userOptional.get();
+
+            return user.username();
+        } catch (RepositoryException e) {
+            LOGGER.error(
+                    "Repository error while extracting sender username for User ID {}: {}.",
+                    message.senderId(),
+                    e.getMessage(),
+                    e);
+            throw new ServiceException("Failed to extract username due to a system error.", e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(
+                    "Invalid argument while extracting sender username for User ID {}: {}.",
+                    message.senderId(),
+                    e.getMessage(),
+                    e);
+            throw new ServiceException("Failed to extract username due to a system error.", e);
         }
     }
 }

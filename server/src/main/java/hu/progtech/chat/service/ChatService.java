@@ -7,4 +7,6 @@ public interface ChatService {
     Message sendMessage(String token, String content) throws ServiceException;
 
     List<Message> getChatHistory() throws ServiceException;
+
+    String getUsernameForMessage(Message message) throws ServiceException;
 }
