@@ -19,12 +19,12 @@ public class ChatServiceImpl implements ChatService {
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
     private final TokenManager tokenManager;
-    private final ChatEventBus eventBus;
+    private final ChatEventBus chatEventBus;
 
     public ChatServiceImpl(
             final MessageRepository messageRepository,
             final UserRepository userRepository,
-            final ChatEventBus eventBus,
+            final ChatEventBus chatEventBus,
             final TokenManager tokenManager) {
         if (messageRepository == null) {
             throw new IllegalArgumentException("MessageRepository cannot be null.");
@@ -34,7 +34,7 @@ public class ChatServiceImpl implements ChatService {
             throw new IllegalArgumentException("UserRepository cannot be null.");
         }
 
-        if (eventBus == null) {
+        if (chatEventBus == null) {
             throw new IllegalArgumentException("ChatEventBus cannot be null.");
         }
 
@@ -44,7 +44,7 @@ public class ChatServiceImpl implements ChatService {
 
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
-        this.eventBus = eventBus;
+        this.chatEventBus = chatEventBus;
         this.tokenManager = tokenManager;
     }
 
@@ -79,7 +79,7 @@ public class ChatServiceImpl implements ChatService {
                     senderId,
                     savedMessage.id());
 
-            eventBus.publish("globalRoom", savedMessage);
+            chatEventBus.publish("globalRoom", savedMessage);
             LOGGER.debug(
                     "Published message {} to event bus on topic {}.", savedMessage, "globalRoom");
             return savedMessage;
