@@ -21,7 +21,6 @@ import org.apache.logging.log4j.Logger;
 
 public class RequestHandler extends ChatServiceGrpc.ChatServiceImplBase {
     private static final Logger LOGGER = LogManager.getLogger(RequestHandler.class);
-    private static final String GLOBAL_CHAT_ROOM = "globalChat";
 
     private final AuthService authService;
     private final ChatService chatService;
@@ -103,11 +102,11 @@ public class RequestHandler extends ChatServiceGrpc.ChatServiceImplBase {
                 (ServerCallStreamObserver<MessageEvent>) responseObserver;
         serverObs.setOnCancelHandler(
                 () -> {
-                    chatEventBus.unsubscribe(GLOBAL_CHAT_ROOM, subscriber);
+                    chatEventBus.unsubscribe(ChatService.GLOBAL_CHAT_ROOM, subscriber);
                     LOGGER.info("Client has unsubscribed from message events.");
                 });
 
-        chatEventBus.subscribe(GLOBAL_CHAT_ROOM, subscriber);
+        chatEventBus.subscribe(ChatService.GLOBAL_CHAT_ROOM, subscriber);
         LOGGER.info("New client subscribed to message events.");
     }
 }

@@ -79,7 +79,7 @@ public class ChatServiceImpl implements ChatService {
                     senderId,
                     savedMessage.id());
 
-            chatEventBus.publish("globalRoom", savedMessage);
+            chatEventBus.publish(GLOBAL_CHAT_ROOM, savedMessage);
             LOGGER.debug(
                     "Published message {} to event bus on topic {}.", savedMessage, "globalRoom");
             return savedMessage;
