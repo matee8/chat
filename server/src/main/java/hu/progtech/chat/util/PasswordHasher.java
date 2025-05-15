@@ -2,7 +2,7 @@ package hu.progtech.chat.util;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-public class PasswordHasher {
+public final class PasswordHasher {
     private PasswordHasher() {}
 
     public static String hashPassword(final String plainPassword) {

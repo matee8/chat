@@ -14,7 +14,7 @@ import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class TokenManager {
+public final class TokenManager {
     private static final Logger LOGGER = LogManager.getLogger(TokenManager.class);
 
     private final Algorithm algorithm;
