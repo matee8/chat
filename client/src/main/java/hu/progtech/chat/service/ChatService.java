@@ -3,6 +3,7 @@ package hu.progtech.chat.service;
 import hu.progtech.chat.communication.Client;
 import hu.progtech.chat.model.ChatMessage;
 import hu.progtech.chat.model.RequestResult;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
@@ -77,14 +78,15 @@ public class ChatService {
     }
 
     public CompletableFuture<RequestResult> sendMessage(final String content) {
-        if (!userSessionService.isAuthenticated()) {
+        final Optional<String> tokenOptional = userSessionService.token();
+        if (tokenOptional.isEmpty()) {
             LOGGER.warn("Send message attempt by unauthenticated user.");
 
             return CompletableFuture.completedFuture(
                     new RequestResult(false, "User not authenticated. Please login first."));
         }
 
-        final String token = userSessionService.token();
+        final String token = tokenOptional.get();
 
         return client.sendMessage(token, content)
                 .thenApply(
@@ -100,7 +102,8 @@ public class ChatService {
     }
 
     public Flow.Publisher<ChatMessage> subscribeToMessages() {
-        if (!userSessionService.isAuthenticated()) {
+        final Optional<String> tokenOptional = userSessionService.token();
+        if (tokenOptional.isEmpty()) {
             LOGGER.warn("Subscribe attempt by unauthenticated user.");
 
             final SubmissionPublisher<ChatMessage> errorPublisher = new SubmissionPublisher<>();
@@ -109,7 +112,7 @@ public class ChatService {
             return errorPublisher;
         }
 
-        final String token = userSessionService.token();
+        final String token = tokenOptional.get();
 
         LOGGER.info("Subscribing to messages.");
 

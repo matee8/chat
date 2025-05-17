@@ -1,5 +1,6 @@
 package hu.progtech.chat.service;
 
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,12 +43,12 @@ public class UserSessionService {
         LOGGER.info("User '{}' logged out successfully.", username);
     }
 
-    public String token() {
-        return token;
+    public Optional<String> token() {
+        return Optional.ofNullable(token);
     }
 
-    public String username() {
-        return username;
+    public Optional<String> username() {
+        return Optional.ofNullable(username);
     }
 
     public boolean isAuthenticated() {
