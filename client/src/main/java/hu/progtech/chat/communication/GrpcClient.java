@@ -73,10 +73,21 @@ public class GrpcClient implements Client {
                     try {
                         LoginResponse response = blockingStub.login(request);
 
+                        Optional<String> tokenOptional = Optional.empty();
+                        if (response.getSuccess()) {
+                            String token = response.getToken();
+
+                            if (token == null || token.isBlank()) {
+                                LOGGER.warn("Login response success=true but token is null or blank.");
+                            } else {
+                                tokenOptional = Optional.of(token);
+                            }
+                        }
+
                         return new LoginResult(
                                 response.getSuccess(),
                                 response.getMessage(),
-                                Optional.of(response.getToken()));
+                                tokenOptional);
                     } catch (Exception e) {
                         LOGGER.error(
                                 "Login failed for user {}: {}.",
