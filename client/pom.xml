@@ -93,6 +93,21 @@
       <artifactId>config</artifactId>
       <version>1.4.3</version>
     </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>24.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>24.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+      <version>24.0.1</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -244,6 +259,14 @@
               </configuration>
             </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <configuration>
+          <mainClass>hu.progtech.chat.App</mainClass>
+        </configuration>
       </plugin>
     </plugins>
     <extensions>

@@ -1,10 +1,15 @@
 package hu.progtech.chat;
 
-/**
- * Hello world!
- */
-public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class App extends Application {
+    @Override
+    public void start(Stage stage) {
+        stage.show();
+    }
+
+    public static void Main(String[] args) {
+        launch();
     }
 }
