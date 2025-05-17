@@ -31,7 +31,7 @@ public class ChatService {
                                 LOGGER.info("Registration successful for user: {}.", username);
                             } else {
                                 LOGGER.warn(
-                                        "Registreation failed for user {}: {}.",
+                                        "Registration failed for user {}: {}.",
                                         username,
                                         result.message());
                             }
@@ -48,7 +48,7 @@ public class ChatService {
                         result -> {
                             if (result.success() && result.token().isPresent()) {
                                 userSessionService.login(result.token().get(), username);
-                                LOGGER.info("Login succesful for user: {}.", username);
+                                LOGGER.info("Login successful for user: {}.", username);
 
                                 return new RequestResult(true, result.message());
                             } else {
@@ -74,7 +74,6 @@ public class ChatService {
         userSessionService.logout();
 
         LOGGER.info("User logout process initiated from ChatService.");
-        ;
     }
 
     public CompletableFuture<RequestResult> sendMessage(final String content) {
