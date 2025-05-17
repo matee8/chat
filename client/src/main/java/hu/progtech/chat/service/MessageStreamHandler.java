@@ -1,4 +1,4 @@
-package hu.progtech.chat.communication;
+package hu.progtech.chat.service;
 
 import hu.progtech.chat.model.ChatMessage;
 import hu.progtech.chat.proto.MessageEvent;
@@ -18,26 +18,26 @@ public class MessageStreamHandler implements StreamObserver<MessageEvent> {
     }
 
     @Override
-    public void onNext(MessageEvent protoMessage) {
+    public void onNext(final MessageEvent message) {
         try {
-            LOGGER.info("gRPC stream received message ID: {}.", protoMessage.getMessageId());
+            LOGGER.info("gRPC stream received message ID: {}.", message.getMessageId());
 
-            ChatMessage chatMessage =
+            final ChatMessage chatMessage =
                     new ChatMessage(
-                            protoMessage.getMessageId(),
-                            protoMessage.getSenderName(),
-                            protoMessage.getContent(),
-                            TimestampConverter.toLocalDateTime(protoMessage.getTimestamp()));
+                            message.getMessageId(),
+                            message.getSenderName(),
+                            message.getContent(),
+                            TimestampConverter.toLocalDateTime(message.getTimestamp()));
 
             publisher.submit(chatMessage);
-            LOGGER.debug("Submitted ChatMessage to publisher: {}.", chatMessage.id());
+            LOGGER.debug("Submitted ChatMessage to publisher: {}.", message.getMessageId());
         } catch (Exception e) {
             LOGGER.error("Error processing incoming message in onNext: {}.", e.getMessage(), e);
         }
     }
 
     @Override
-    public void onError(Throwable t) {
+    public void onError(final Throwable t) {
         LOGGER.error("Message stream error from server: {}.", t, t);
         publisher.closeExceptionally(t);
     }
