@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package hu.progtech.chat.proto;
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "hu.progtech.chat.proto";
+option java_multiple_files = true;
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message RegisterResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+  string message = 2;
+  string token = 3;
+}
+
+message SendMessageRequest {
+  string token = 1;
+  string content = 2;
+}
+
+message SendMessageResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message MessageEvent {
+  int64 messageId = 1;
+  string senderName = 2;
+  string content = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message SubscribeRequest {
+  string token = 1;
+}
+
+service ChatService {
+  rpc Register(RegisterRequest) returns (RegisterResponse) {}
+  rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse) {}
+  rpc Subscribe(SubscribeRequest) returns (stream MessageEvent) {}
+}
