@@ -29,8 +29,6 @@ public class ChatViewModel {
     private final UserSessionService userSessionService;
     private final Runnable onLogoutSuccess;
 
-    private Flow.Subscription messageSubscription;
-
     private final Command sendMessageCommand;
     private final Command logoutCommand;
 
@@ -46,7 +44,6 @@ public class ChatViewModel {
         this.logoutCommand =
                 new LogoutCommand(
                         chatService,
-                        messageSubscription,
                         currentUserDisplay,
                         messages,
                         onLogoutSuccess);
@@ -77,14 +74,6 @@ public class ChatViewModel {
     }
 
     public void initializeChatSession() {
-        if (!userSessionService.isAuthenticated()) {
-            LOGGER.warn(
-                    "Attempted to initialize chat session while not authenticated. Redirecting to"
-                            + " login.");
-            Platform.runLater(onLogoutSuccess);
-            return;
-        }
-
         Optional<String> usernameOptional = userSessionService.username();
         if (usernameOptional.isEmpty()) {
             LOGGER.warn(
@@ -99,22 +88,8 @@ public class ChatViewModel {
         LOGGER.info("Initializing chat session for user: {}.", username);
         messages.clear();
 
-        if (messageSubscription != null) {
-            messageSubscription.cancel();
-            LOGGER.debug("Cancelled existing message subscription before creating a new one.");
-        }
-
         Flow.Publisher<ChatMessage> messageStream = chatService.subscribeToMessages();
 
-        messageStream.subscribe(new StreamSubscriber(messageSubscription, messages, errorMessage));
-    }
-
-    public void cleanup() {
-        LOGGER.info("Cleaning up ChatViewModel resources.");
-        if (messageSubscription != null) {
-            messageSubscription.cancel();
-            messageSubscription = null;
-            LOGGER.debug("Message subscription cancelled during cleanup.");
-        }
+        messageStream.subscribe(new StreamSubscriber(messages, errorMessage));
     }
 }

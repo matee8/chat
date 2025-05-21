@@ -13,18 +13,15 @@ public class LogoutCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(LogoutCommand.class);
     private final ChatService chatService;
     private final StringProperty currentUserDisplay;
-    private Flow.Subscription messageSubscription;
     private final ObservableList<ChatMessage> messages;
     private final Runnable onLogoutSuccess;
 
     public LogoutCommand(
             final ChatService chatService,
-            final Flow.Subscription messageSubscription,
             final StringProperty currentUserDisplay,
             final ObservableList<ChatMessage> messages,
             final Runnable onLogoutSuccess) {
         this.chatService = chatService;
-        this.messageSubscription = messageSubscription;
         this.currentUserDisplay = currentUserDisplay;
         this.messages = messages;
         this.onLogoutSuccess = onLogoutSuccess;
@@ -33,11 +30,6 @@ public class LogoutCommand implements Command {
     @Override
     public void execute() {
         LOGGER.info("Logout command executed.");
-        if (messageSubscription != null) {
-            messageSubscription.cancel();
-            messageSubscription = null;
-            LOGGER.debug("Message subscription cancelled.");
-        }
         chatService.logout();
         Platform.runLater(
                 () -> {

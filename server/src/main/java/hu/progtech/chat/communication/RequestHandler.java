@@ -86,7 +86,7 @@ public class RequestHandler extends ChatServiceGrpc.ChatServiceImplBase {
         } catch (ServiceException e) {
             out.onNext(
                     SendMessageResponse.newBuilder()
-                            .setSuccess(true)
+                            .setSuccess(false)
                             .setMessage(e.getMessage())
                             .build());
         }

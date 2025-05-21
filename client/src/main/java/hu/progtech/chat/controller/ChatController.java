@@ -49,7 +49,6 @@ public class ChatController implements InitializableController {
     }
 
     public void onViewHidden() {
-        LOGGER.debug("ChatView hidden. Cleaning up chat session resources.");
-        viewModel.cleanup();
+        LOGGER.debug("ChatView hidden.");
     }
 }

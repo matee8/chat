@@ -59,7 +59,6 @@ public class App extends Application {
                     logger.info("Application shutting down...");
                     client.close();
                     Platform.exit();
-                    System.exit(0);
                 });
         stage.show();
         logger.info("Application started successfully.");
