@@ -13,7 +13,9 @@ public class SendMessageCommand {
     private final StringProperty errorMessage;
 
     public SendMessageCommand(
-            ChatService chatService, StringProperty currentMessage, StringProperty errorMessage) {
+            final ChatService chatService,
+            final StringProperty currentMessage,
+            final StringProperty errorMessage) {
         this.chatService = chatService;
         this.currentMessage = currentMessage;
         this.errorMessage = errorMessage;

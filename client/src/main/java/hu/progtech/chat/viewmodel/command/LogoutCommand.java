@@ -18,11 +18,11 @@ public class LogoutCommand {
     private final Runnable onLogoutSuccess;
 
     public LogoutCommand(
-            ChatService chatService,
-            Flow.Subscription messageSubscription,
-            StringProperty currentUserDisplay,
-            ObservableList<ChatMessage> messages,
-            Runnable onLogoutSuccess) {
+            final ChatService chatService,
+            final Flow.Subscription messageSubscription,
+            final StringProperty currentUserDisplay,
+            final ObservableList<ChatMessage> messages,
+            final Runnable onLogoutSuccess) {
         this.chatService = chatService;
         this.messageSubscription = messageSubscription;
         this.currentUserDisplay = currentUserDisplay;

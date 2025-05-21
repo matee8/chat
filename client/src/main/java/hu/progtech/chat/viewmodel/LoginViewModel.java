@@ -25,14 +25,13 @@ public class LoginViewModel {
     public LoginViewModel(
             final ChatService chatService,
             final UserSessionService userSessionService,
-            final Runnable onLoginSuccess,
-            final Command loginCommand,
-            final Command registerCommand) {
+            final Runnable onLoginSuccess) {
         this.chatService = chatService;
         this.userSessionService = userSessionService;
         this.onLoginSuccess = onLoginSuccess;
-        this.loginCommand = loginCommand;
-        this.registerCommand = registerCommand;
+        this.loginCommand =
+                new LoginCommand(chatService, username, password, errorMessage, onLoginSuccess);
+        this.registerCommand = new RegisterCommand(chatService, username, password, errorMessage);
     }
 
     public StringProperty usernameProperty() {

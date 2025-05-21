@@ -35,15 +35,22 @@ public class ChatViewModel {
     public ChatViewModel(
             final ChatService chatService,
             final UserSessionService userSessionService,
-            final Runnable onLogoutSuccess,
-            final Command sendMessageCommand,
-            final Command logoutCommand) {
+            final Runnable onLogoutSuccess) {
         this.chatService = chatService;
         this.userSessionService = userSessionService;
         this.onLogoutSuccess = onLogoutSuccess;
 
         this.sendMessageCommand = sendMessageCommand;
         this.logoutCommand = logoutCommand;
+
+        this.sendMessageCommand = new SendMessageCommand(chatService, currentMessage, errorMessage);
+        this.logoutCommand =
+                new LogoutCommand(
+                        chatService,
+                        messageSubscription,
+                        currentUserDisplay,
+                        messages,
+                        onLogoutSuccess);
     }
 
     public ObservableList<ChatMessage> getMessages() {

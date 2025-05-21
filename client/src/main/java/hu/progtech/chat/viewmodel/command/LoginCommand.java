@@ -15,11 +15,11 @@ public class LoginCommand {
     private final Runnable onLoginSuccess;
 
     public LoginCommand(
-            ChatService chatService,
-            StringProperty username,
-            StringProperty password,
-            StringProperty errorMessage,
-            Runnable onLoginSuccess) {
+            final ChatService chatService,
+            final StringProperty username,
+            final StringProperty password,
+            final StringProperty errorMessage,
+            final Runnable onLoginSuccess) {
         this.chatService = chatService;
         this.username = username;
         this.password = password;

@@ -14,10 +14,10 @@ public class RegisterCommand {
     private final StringProperty errorMessage;
 
     public RegisterCommand(
-            ChatService chatService,
-            StringProperty username,
-            StringProperty password,
-            StringProperty errorMessage) {
+            final ChatService chatService,
+            final StringProperty username,
+            final StringProperty password,
+            final StringProperty errorMessage) {
         this.chatService = chatService;
         this.username = username;
         this.password = password;
