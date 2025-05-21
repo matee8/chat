@@ -16,5 +16,5 @@ public interface Client extends AutoCloseable {
     Flow.Publisher<ChatMessage> subscribeToMessages(String token);
 
     @Override
-    void close() throws Exception;
+    void close();
 }

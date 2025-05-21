@@ -1,4 +1,4 @@
-package hu.progtech.chat.viewmodel.commands;
+package hu.progtech.chat.viewmodel.command;
 
 import hu.progtech.chat.service.ChatService;
 import javafx.application.Platform;
@@ -6,7 +6,7 @@ import javafx.beans.property.StringProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LoginCommand {
+public class LoginCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(LoginCommand.class);
     private final ChatService chatService;
     private final StringProperty username;
@@ -27,6 +27,7 @@ public class LoginCommand {
         this.onLoginSuccess = onLoginSuccess;
     }
 
+    @Override
     public void execute() {
         LOGGER.info("Login command executed for user: {}", username.get());
         chatService

@@ -1,4 +1,4 @@
-package hu.progtech.chat.viewmodel.commands;
+package hu.progtech.chat.viewmodel.command;
 
 import hu.progtech.chat.service.ChatService;
 import javafx.application.Platform;
@@ -6,7 +6,7 @@ import javafx.beans.property.StringProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class SendMessageCommand {
+public class SendMessageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(SendMessageCommand.class);
     private final ChatService chatService;
     private final StringProperty currentMessage;
@@ -21,6 +21,7 @@ public class SendMessageCommand {
         this.errorMessage = errorMessage;
     }
 
+    @Override
     public void execute() {
         String messageContent = currentMessage.get();
         if (messageContent == null || messageContent.trim().isEmpty()) {

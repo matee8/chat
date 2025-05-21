@@ -140,12 +140,16 @@ public class GrpcClient implements Client {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         LOGGER.info(
                 "Shutting down gRPC channel for {}:{}.", channel.authority(), channel.toString());
 
-        if (!channel.isTerminated()) {
-            channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+        try {
+            if (!channel.isTerminated()) {
+                channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+            }
+        } catch (InterruptedException e) {
+            LOGGER.error("Error shuttind down connection: {}.", e.getMessage(), e);
         }
 
         LOGGER.info("gRPC channel shutdown complete.");

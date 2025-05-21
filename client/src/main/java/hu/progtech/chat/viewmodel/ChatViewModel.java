@@ -4,6 +4,8 @@ import hu.progtech.chat.model.ChatMessage;
 import hu.progtech.chat.service.ChatService;
 import hu.progtech.chat.service.UserSessionService;
 import hu.progtech.chat.viewmodel.command.Command;
+import hu.progtech.chat.viewmodel.command.LogoutCommand;
+import hu.progtech.chat.viewmodel.command.SendMessageCommand;
 import java.util.Optional;
 import java.util.concurrent.Flow;
 import javafx.application.Platform;
@@ -40,9 +42,6 @@ public class ChatViewModel {
         this.userSessionService = userSessionService;
         this.onLogoutSuccess = onLogoutSuccess;
 
-        this.sendMessageCommand = sendMessageCommand;
-        this.logoutCommand = logoutCommand;
-
         this.sendMessageCommand = new SendMessageCommand(chatService, currentMessage, errorMessage);
         this.logoutCommand =
                 new LogoutCommand(
@@ -53,7 +52,7 @@ public class ChatViewModel {
                         onLogoutSuccess);
     }
 
-    public ObservableList<ChatMessage> getMessages() {
+    public ObservableList<ChatMessage> messages() {
         return messages;
     }
 
@@ -67,6 +66,14 @@ public class ChatViewModel {
 
     public StringProperty currentUserDisplayProperty() {
         return currentUserDisplay;
+    }
+
+    public Command sendMessageCommand() {
+        return sendMessageCommand;
+    }
+
+    public Command logoutCommand() {
+        return logoutCommand;
     }
 
     public void initializeChatSession() {
@@ -100,5 +107,14 @@ public class ChatViewModel {
         Flow.Publisher<ChatMessage> messageStream = chatService.subscribeToMessages();
 
         messageStream.subscribe(new StreamSubscriber(messageSubscription, messages, errorMessage));
+    }
+
+    public void cleanup() {
+        LOGGER.info("Cleaning up ChatViewModel resources.");
+        if (messageSubscription != null) {
+            messageSubscription.cancel();
+            messageSubscription = null;
+            LOGGER.debug("Message subscription cancelled during cleanup.");
+        }
     }
 }

@@ -1,4 +1,4 @@
-package hu.progtech.chat.viewmodel.commands;
+package hu.progtech.chat.viewmodel.command;
 
 import hu.progtech.chat.model.ChatMessage;
 import hu.progtech.chat.service.ChatService;
@@ -9,7 +9,7 @@ import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LogoutCommand {
+public class LogoutCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(LogoutCommand.class);
     private final ChatService chatService;
     private final StringProperty currentUserDisplay;
@@ -30,6 +30,7 @@ public class LogoutCommand {
         this.onLogoutSuccess = onLogoutSuccess;
     }
 
+    @Override
     public void execute() {
         LOGGER.info("Logout command executed.");
         if (messageSubscription != null) {

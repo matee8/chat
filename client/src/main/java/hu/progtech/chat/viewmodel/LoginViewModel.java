@@ -3,6 +3,8 @@ package hu.progtech.chat.viewmodel;
 import hu.progtech.chat.service.ChatService;
 import hu.progtech.chat.service.UserSessionService;
 import hu.progtech.chat.viewmodel.command.Command;
+import hu.progtech.chat.viewmodel.command.LoginCommand;
+import hu.progtech.chat.viewmodel.command.RegisterCommand;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.apache.logging.log4j.LogManager;
@@ -44,6 +46,14 @@ public class LoginViewModel {
 
     public StringProperty errorMessageProperty() {
         return errorMessage;
+    }
+
+    public Command loginCommand() {
+        return loginCommand;
+    }
+
+    public Command registerCommand() {
+        return registerCommand;
     }
 
     public void resetFields() {
