@@ -149,7 +149,7 @@ public class GrpcClient implements Client {
                 channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
             }
         } catch (InterruptedException e) {
-            LOGGER.error("Error shuttind down connection: {}.", e.getMessage(), e);
+            LOGGER.error("Error shutting down connection: {}.", e.getMessage(), e);
         }
 
         LOGGER.info("gRPC channel shutdown complete.");
