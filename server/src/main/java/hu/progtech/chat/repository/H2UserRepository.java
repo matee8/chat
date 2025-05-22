@@ -91,7 +91,7 @@ public class H2UserRepository implements UserRepository {
                 throw new RepositoryException("Username already exists.", e);
             }
             LOGGER.error("Unexpected error when saving user {}.", user.username(), e);
-            throw new RepositoryException("Error wsaving user " + user.username(), e);
+            throw new RepositoryException("Error saving user " + user.username(), e);
         }
     }
 

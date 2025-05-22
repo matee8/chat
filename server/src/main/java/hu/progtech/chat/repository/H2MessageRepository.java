@@ -87,7 +87,7 @@ public class H2MessageRepository implements MessageRepository {
             LOGGER.error(
                     "Unexpected error when saving message from User #{}.", message.senderId(), e);
             throw new RepositoryException(
-                    "Error saving messagea from User #" + message.senderId(), e);
+                    "Error saving message from User #" + message.senderId(), e);
         }
     }
 

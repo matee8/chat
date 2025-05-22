@@ -34,7 +34,7 @@ public class AppConfigLoader {
 
             final AppConfig appConfig =
                     new AppConfig(serverSettings, databaseSettings, tokenSettings);
-            LOGGER.info("Application configuration loaded succesfully.");
+            LOGGER.info("Application configuration loaded successfully.");
 
             return appConfig;
         } catch (ConfigException.Missing e) {
