@@ -2,7 +2,6 @@ package hu.progtech.chat.viewmodel.command;
 
 import hu.progtech.chat.model.ChatMessage;
 import hu.progtech.chat.service.ChatService;
-import java.util.concurrent.Flow;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;

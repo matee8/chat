@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -68,8 +69,10 @@ public class H2MessageRepository implements MessageRepository {
                 if (generatedKeys.next()) {
                     final long newId = generatedKeys.getLong(1);
                     final Timestamp ts = generatedKeys.getTimestamp("timestamp");
-                    final LocalDateTime newTimestamp = (ts != null) ? ts.toLocalDateTime() : null;
-
+                    final LocalDateTime newTimestamp =
+                            (ts != null)
+                                    ? LocalDateTime.ofInstant(ts.toInstant(), ZoneOffset.UTC)
+                                    : null;
                     if (newTimestamp == null) {
                         LOGGER.warn(
                                 "Timestamp was not returned by getGeneratedKeys() for message id"
@@ -113,6 +116,9 @@ public class H2MessageRepository implements MessageRepository {
     }
 
     private Message mapRowToMessage(final ResultSet rs) throws SQLException {
+        Timestamp ts = rs.getTimestamp("timestamp");
+        LocalDateTime timestamp =
+                (ts != null) ? LocalDateTime.ofInstant(ts.toInstant(), ZoneOffset.UTC) : null;
         return new Message(
                 rs.getLong("message_id"),
                 rs.getLong("sender_id"),

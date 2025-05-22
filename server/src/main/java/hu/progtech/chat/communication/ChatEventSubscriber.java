@@ -6,17 +6,18 @@ import hu.progtech.chat.model.Message;
 import hu.progtech.chat.proto.MessageEvent;
 import hu.progtech.chat.service.ChatService;
 import io.grpc.stub.StreamObserver;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ChatEventSubscriber implements Subscriber {
     private static final Logger LOGGER = LogManager.getLogger(ChatEventSubscriber.class);
-    private final StreamObserver streamObserver;
+    private final StreamObserver<MessageEvent> streamObserver;
     private final ChatService chatService;
 
-    public ChatEventSubscriber(final StreamObserver streamObserver, final ChatService chatService) {
+    public ChatEventSubscriber(
+            final StreamObserver<MessageEvent> streamObserver, final ChatService chatService) {
         if (streamObserver == null) {
             throw new IllegalArgumentException("StreamObserver cannot be null.");
         }
@@ -34,7 +35,7 @@ public class ChatEventSubscriber implements Subscriber {
         try {
             String senderUsername = chatService.getUsernameForMessage(message);
 
-            ZonedDateTime zonedDateTime = message.timestamp().atZone(ZoneId.systemDefault());
+            ZonedDateTime zonedDateTime = message.timestamp().atZone(ZoneOffset.UTC);
 
             long millis = zonedDateTime.toInstant().toEpochMilli();
 

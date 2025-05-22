@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class H2UserRepository implements UserRepository {
             stmt.execute(CREATE_SQL_TABLE);
             LOGGER.info("Users table initilization complete.");
         } catch (SQLException e) {
-            LOGGER.error("Failed to initialize users table: " + e, e);
+            LOGGER.error("Failed to initialize users table: {}.", e, e);
             throw new RepositoryException("Failed to initialize users table.", e);
         }
     }
@@ -70,7 +71,10 @@ public class H2UserRepository implements UserRepository {
                 if (generatedKeys.next()) {
                     final long newId = generatedKeys.getLong(1);
                     final Timestamp ts = generatedKeys.getTimestamp("created_at");
-                    final LocalDateTime newCreatedAt = (ts != null) ? ts.toLocalDateTime() : null;
+                    final LocalDateTime newCreatedAt =
+                            (ts != null)
+                                    ? LocalDateTime.ofInstant(ts.toInstant(), ZoneOffset.UTC)
+                                    : null;
 
                     if (newCreatedAt == null) {
                         LOGGER.warn(
@@ -162,6 +166,9 @@ public class H2UserRepository implements UserRepository {
     }
 
     private User mapRowToUser(ResultSet rs) throws SQLException {
+        Timestamp ts = rs.getTimestamp("created_at");
+        LocalDateTime createdAt =
+                (ts != null) ? LocalDateTime.ofInstant(ts.toInstant(), ZoneOffset.UTC) : null;
         return new User(
                 rs.getLong("user_id"),
                 rs.getString("username"),

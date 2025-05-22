@@ -16,8 +16,7 @@ public class StreamSubscriber implements Flow.Subscriber<ChatMessage> {
     private final StringProperty errorMessage;
 
     public StreamSubscriber(
-            final ObservableList<ChatMessage> messages,
-            final StringProperty errorMessage) {
+            final ObservableList<ChatMessage> messages, final StringProperty errorMessage) {
         this.messages = messages;
         this.errorMessage = errorMessage;
     }

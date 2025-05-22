@@ -42,11 +42,7 @@ public class ChatViewModel {
 
         this.sendMessageCommand = new SendMessageCommand(chatService, currentMessage, errorMessage);
         this.logoutCommand =
-                new LogoutCommand(
-                        chatService,
-                        currentUserDisplay,
-                        messages,
-                        onLogoutSuccess);
+                new LogoutCommand(chatService, currentUserDisplay, messages, onLogoutSuccess);
     }
 
     public ObservableList<ChatMessage> messages() {

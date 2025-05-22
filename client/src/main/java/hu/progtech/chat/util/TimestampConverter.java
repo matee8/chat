@@ -4,7 +4,7 @@ import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.Timestamps;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 public final class TimestampConverter {
@@ -16,7 +16,7 @@ public final class TimestampConverter {
         }
 
         return LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(Timestamps.toMillis(timestamp)), ZoneId.systemDefault());
+                Instant.ofEpochMilli(Timestamps.toMillis(timestamp)), ZoneOffset.UTC);
     }
 
     public static Timestamp fromLocalDateTime(final LocalDateTime localDateTime) {
@@ -24,7 +24,7 @@ public final class TimestampConverter {
             return null;
         }
 
-        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneOffset.UTC);
 
         long millis = zonedDateTime.toInstant().toEpochMilli();
 
