@@ -48,8 +48,8 @@ public class App extends Application {
         LoginController loginController = new LoginController(loginViewModel);
         ChatController chatController = new ChatController(chatViewModel);
 
-        viewManager.addScene("login", "/LoginView.fxml", loginController);
-        viewManager.addScene("chat", "/ChatView.fxml", chatController);
+        viewManager.addScene("login", "/fxml/LoginView.fxml", loginController);
+        viewManager.addScene("chat", "/fxml/ChatView.fxml", chatController);
 
         showLoginView();
 
