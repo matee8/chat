@@ -63,10 +63,6 @@ public class AuthServiceImpl implements AuthService {
                     username,
                     e.getMessage(),
                     e);
-            if (e.getMessage() != null && e.getMessage().contains("already exists")) {
-                LOGGER.warn("Registration failed for user {}: username already exists.", username);
-                throw new ServiceException("Username '" + username + "' already exists.");
-            }
             throw new ServiceException("Registration failed due to a system error.", e);
         } catch (IllegalArgumentException e) {
             LOGGER.error(
