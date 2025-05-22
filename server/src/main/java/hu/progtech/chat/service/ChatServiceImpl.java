@@ -81,7 +81,9 @@ public class ChatServiceImpl implements ChatService {
 
             chatEventBus.publish(GLOBAL_CHAT_ROOM, savedMessage);
             LOGGER.debug(
-                    "Published message {} to event bus on topic {}.", savedMessage, "globalRoom");
+                    "Published message {} to event bus on topic {}.",
+                    savedMessage,
+                    GLOBAL_CHAT_ROOM);
             return savedMessage;
         } catch (RepositoryException e) {
             LOGGER.error(
