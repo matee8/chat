@@ -47,7 +47,7 @@ public class H2MessageRepository implements MessageRepository {
     }
 
     @Override
-    public Message save(final Message message) {
+    public Message save(final Message message) throws RepositoryException {
         final String sql = "INSERT INTO messages (sender_id, content) VALUES (?, ?)";
 
         try (Connection conn = databaseManager.getConnection();
@@ -92,7 +92,7 @@ public class H2MessageRepository implements MessageRepository {
     }
 
     @Override
-    public List<Message> getChatHistory() {
+    public List<Message> getChatHistory() throws RepositoryException {
         final String sql = "SELECT * FROM messages;";
 
         final List<Message> messages = new ArrayList<>();

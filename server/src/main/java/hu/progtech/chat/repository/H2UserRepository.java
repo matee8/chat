@@ -141,7 +141,7 @@ public class H2UserRepository implements UserRepository {
     }
 
     @Override
-    public List<User> findAll() {
+    public List<User> findAll() throws RepositoryException {
         final String sql = "SELECT * FROM users";
 
         final List<User> users = new ArrayList<>();
